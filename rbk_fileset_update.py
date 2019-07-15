@@ -10,7 +10,17 @@ import platform
 urllib3.disable_warnings()
 
 def usage():
+    sys.stderr.write("Usage: rbk_fileset_update [-hvD] [-c creds] [-f fileset] share path rubrik\n")
+    sys.stderr.write("-h | --help : Prints this message\n")
+    sys.stderr.write("-v | --verbose : Verbose mode.  Prints more information\n")
+    sys.stderr.write("-D| --debug : Debug mode.  Prints troubleshoting info (+ verbose mode)\n")
+    sys.stderr.write("-c | --creds= : Rubrik crednetials.  Either user:password or creds file\n")
+    sys.stderr.write("-f | --fileset= : Specify a fileset.  Needed if share has more than one assigned\n")
+    sys.stderr.write("share : The share as defined on the rubrk.  Format: host:share/path\n")
+    sys.stderr.write("path : The path to the share on the local machine\n")
+    sys.stderr.write("rubrik: The name or IP of the Rubrik\n")
     exit(0)
+
 
 def vprint(message):
     if verbose:
