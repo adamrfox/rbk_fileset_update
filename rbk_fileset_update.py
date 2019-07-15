@@ -49,6 +49,7 @@ def get_creds_from_file(file, array):
             password = xs[2]
     return (user, password)
 
+
 def find_latest_dir(path):
     latest_dir = ""
     dprint ("PATH=" + path)
