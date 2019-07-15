@@ -24,10 +24,10 @@ NOTE: If the share has more than 1 fileset assinged to it, one will need to be s
 
 Usage:
 <pre>
-Usage: rbk_fileset_update [-hvD] [-c creds] [-f fileset] share path rubrik
+Usage: rbk_fileset_update.py [-hvD] [-c creds] [-f fileset] share path rubrik
 -h | --help : Prints this message
 -v | --verbose : Verbose mode.  Prints more information
--D| --debug : Debug mode.  Prints troubleshoting info (+ verbose mode)
+-D | --debug : Debug mode.  Prints troubleshoting info (+ verbose mode)
 -c | --creds= : Rubrik crednetials.  Either user:password or creds file
 -f | --fileset= : Specify a fileset.  Needed if share has more than one assigned
 share : The share as defined on the rubrk.  Format: host:share/path
