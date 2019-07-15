@@ -85,7 +85,7 @@ if __name__ == "__main__":
         share_delim = "/"
     else:
         share_type = "SMB"
-        shar_delim = "\\"
+        share_delim = "\\"
     if not user:
         user = raw_input("User: ")
     if not password:
