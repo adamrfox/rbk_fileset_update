@@ -70,6 +70,8 @@ if __name__ == "__main__":
     updated_include = []
     debug = False
 
+# Process command line
+
     optlist, args = getopt.getopt(sys.argv[1:], 'hvc:f:D', ['--help', '--verbose', '--creds=', '--fileset=','--debug'])
     for opt, a in optlist:
         if opt in ('-h', '--help'):
@@ -88,6 +90,9 @@ if __name__ == "__main__":
             verbose = True
     if args[0] == "?":
         usage()
+
+# Parse share and deterime type
+
     (share, path, rubrik_host) = args
     (host, share_name) = share.split(':')
     if share_name.startswith("/"):
@@ -96,10 +101,16 @@ if __name__ == "__main__":
     else:
         share_type = "SMB"
         share_delim = "\\"
+
+# Get credentials if not provided
+
     if not user:
         user = raw_input("User: ")
     if not password:
         password = getpass.getpass("Password: ")
+
+# Get the HostShare ID in order to find the associated fileset(s)
+
     rubrik_api = rubrik_cdm.Connect(rubrik_host, user, password)
     hs_data = rubrik_api.get('internal', '/host/share')
     for hs in hs_data['data']:
@@ -110,6 +121,9 @@ if __name__ == "__main__":
         sys.stderr.write("Cannot find share: " + share + "\n ")
         exit (1)
     dprint(hs_id)
+
+# Find the associated filesets.  If multiple, either use the given one or prompt the user for it.
+
     fs_data = rubrik_api.get('v1', '/fileset?share_id=' + str(hs_id))
     if fs_data['total'] == 0:
         sys.stderr.write("Export has no filesets\n")
@@ -129,6 +143,9 @@ if __name__ == "__main__":
     if len(includes) != 1:
         sys.stderr.write("Fileset must have only one include.  Has " + str(len(includes)) + "\n")
         exit(1)
+
+# Grab the include path of the fileset.
+
     inc_path = includes[0]
     inc_path_list = inc_path.split(share_delim)
     inc_path_last =  inc_path_list.pop(-1)
@@ -136,12 +153,18 @@ if __name__ == "__main__":
     path += share_delim.join(inc_path_list)
     if not path.endswith(share_delim):
         path += share_delim
+
+# Find the latest directory via the local mount
+
     dirs = os.listdir(path)
     latest_dir = find_latest_dir(path)
     vprint("Latest Directory: " + latest_dir)
     if not latest_dir:
         sys.stderr.write("Can't find latest directory\n")
         exit(1)
+
+# Form new include path, then update the Rubrik
+
     inc_path_list.append(latest_dir)
     inc_path_list.append(inc_path_last)
     updated_include.append(share_delim.join(inc_path_list))
